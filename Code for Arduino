@@ -1,0 +1,254 @@
+//code for arduino
+
+
+unsigned long millisCurrent;
+unsigned long millisLast = 0;
+const byte DATA_MAX_SIZE = 32;
+char data[DATA_MAX_SIZE];   // an array to store the received data
+char c;
+
+unsigned long millisElapsed = 0;
+int a1 = 0;
+int a2 = 0;
+int a3 = 0;
+int a4 = 0;
+
+int k = 1; //this should be changed
+void setup()
+{
+  Serial.begin(9600);
+}
+
+
+char receiveData() {
+  static char endMarker = '\n'; // message separator
+  char receivedChar;     // read char from serial port
+  int ndx = 0;          // current index of data buffer  // clean data buffer
+  memset(data, 32, sizeof(data));  // read while we have data available and we are
+  // still receiving the same message.
+  while (Serial.available() > 0) {
+    receivedChar = Serial.read();    if (receivedChar == endMarker) {
+      data[ndx] = '\0'; // end current message
+      return data[0];
+    }    // looks like a valid message char, so append it and
+    // increment our index
+    data[ndx] = receivedChar;
+    ndx++;    // if the message is larger than our max size then
+    // stop receiving and clear the data buffer. this will
+    // most likely cause the next part of the message
+    // to be truncated as well, but hopefully when you
+    // parse the message, you'll be able to tell that it's
+    // not a valid message.
+    if (ndx >= DATA_MAX_SIZE) {
+      break;
+    }
+  }  // no more available bytes to read from serial and we
+  // did not receive the separato. it's an incomplete message!
+  Serial.println("error: incomplete message");
+  Serial.println(data);
+  memset(data, 32, sizeof(data));
+}
+
+
+
+
+void loop() {
+
+
+
+
+
+
+  millisCurrent = millis();
+
+  if (digitalRead(7) == LOW) {
+    a1++;
+    a4++;
+  }
+
+
+  if (digitalRead(8) == LOW) {
+    a1++;
+    a2++;
+  }
+
+
+
+  if (digitalRead(12) == LOW) {
+    a2++;
+    a3++;
+  }
+
+
+  if (digitalRead(13) == LOW) {
+    a3++;
+    a4++;
+  }
+
+  if (millisCurrent - millisLast > 10) {
+    if (a1 > a2 && a1 > a3 && a1 > a4) {
+      analogWrite(6, a1 / (k));
+    }
+    if (a2 > a1 && a2 > a3 && a2 > a4) {
+      analogWrite(9, a1 / (k));
+    }
+    if (a3 > a1 && a3 > a2 && a3 > a4) {
+      analogWrite(10, a1 / (k));
+    }
+    if (a4 > a1 && a4 > a2 && a4 > a3) {
+      analogWrite(11, a1 / (k));
+    }
+
+    a1 = 0;
+    a2 = 0;
+    a3 = 0;
+    a4 = 0;
+    millisLast = millisCurrent;
+
+
+  }
+  if (millisCurrent - millisLast > 7) {
+
+    analogWrite(6, 0);
+
+
+    analogWrite(9, 0);
+
+
+    analogWrite(10, 0);
+
+
+    analogWrite(11, 0);
+
+  }
+  c = receiveData();
+  if (c == '1') {
+    digitalWrite(3, 1);
+    delay(100);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(25);
+
+  } else if (c == '2') {
+    digitalWrite(3, 1);
+    delay(100);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(100);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(25);
+
+
+  } else if (c == '3') {
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(25);
+
+
+  } else if (c == '4') {
+    digitalWrite(3, 1);
+    delay(100);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(100);
+    digitalWrite(3, 0);
+    delay(25);
+
+
+
+  } else if (c == '5') {
+    digitalWrite(3, 1);
+    delay(100);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(100);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(100);
+    digitalWrite(3, 0);
+    delay(25);
+
+
+  } else if (c == '6') {
+
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(100);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(25);
+
+
+
+  } else if (c == '6') {
+
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(50);
+    digitalWrite(3, 1);
+    delay(25);
+    digitalWrite(3, 0);
+    delay(25);
+
+
+  }
+
+
+
+}
+
